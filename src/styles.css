@@ -3919,3 +3919,62 @@ h1,
   -webkit-text-stroke: 0.8px rgba(255, 246, 211, 0.9);
   paint-order: stroke fill;
 }
+
+/* Final result-card layout guard: keep desktop image panels from stretching
+   with the text column, and allow long Japanese result names to wrap. */
+.result-hero {
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 46%);
+  align-items: start;
+}
+
+.result-content-grid {
+  align-items: start;
+}
+
+.result-content-grid .result-side {
+  grid-row: auto;
+  align-self: start;
+}
+
+.advice-block,
+.scenes-section,
+.related-section {
+  grid-column: 1 / -1;
+}
+
+.result-copy {
+  min-width: 0;
+}
+
+.result-copy h2,
+.result-main h2 {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: keep-all;
+  text-wrap: balance;
+}
+
+.result-copy h2 {
+  font-size: clamp(2rem, 3.1vw, 3.25rem);
+}
+
+.result-portrait-panel {
+  align-self: start;
+  width: 100%;
+  height: auto;
+}
+
+.result-type-image {
+  width: 100%;
+  max-width: none;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+@media (max-width: 900px) {
+  .result-hero {
+    grid-template-columns: 1fr;
+  }
+}
