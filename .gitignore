@@ -1,8 +1,12 @@
 node_modules
 dist
 .DS_Store
+__pycache__/
+*.pyc
 
 # Local/AI visual production workspaces. The app uses the promoted assets only.
+assets/showa-result-cards/
+assets/showa-result-cards-jpg/
 assets/share-cards-ai-working/
 assets/share-cards-tone-working/
 assets/title-hero-working/

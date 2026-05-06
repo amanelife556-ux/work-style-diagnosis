@@ -13,6 +13,25 @@ import type { AxisKey, Scores } from "./types";
 
 type View = "intro" | "question" | "result";
 
+const resultCardImages: Record<string, string> = {
+  ASEN: new URL("../assets/showa-result-cards-complete/ASEN.jpg", import.meta.url).href,
+  ASEF: new URL("../assets/showa-result-cards-complete/ASEF.jpg", import.meta.url).href,
+  ASDN: new URL("../assets/showa-result-cards-complete/ASDN.jpg", import.meta.url).href,
+  ASDF: new URL("../assets/showa-result-cards-complete/ASDF.jpg", import.meta.url).href,
+  ATEN: new URL("../assets/showa-result-cards-complete/ATEN.jpg", import.meta.url).href,
+  ATEF: new URL("../assets/showa-result-cards-complete/ATEF.jpg", import.meta.url).href,
+  ATDN: new URL("../assets/showa-result-cards-complete/ATDN.jpg", import.meta.url).href,
+  ATDF: new URL("../assets/showa-result-cards-complete/ATDF.jpg", import.meta.url).href,
+  CSEN: new URL("../assets/showa-result-cards-complete/CSEN.jpg", import.meta.url).href,
+  CSEF: new URL("../assets/showa-result-cards-complete/CSEF.jpg", import.meta.url).href,
+  CSDN: new URL("../assets/showa-result-cards-complete/CSDN.jpg", import.meta.url).href,
+  CSDF: new URL("../assets/showa-result-cards-complete/CSDF.jpg", import.meta.url).href,
+  CTEN: new URL("../assets/showa-result-cards-complete/CTEN.jpg", import.meta.url).href,
+  CTEF: new URL("../assets/showa-result-cards-complete/CTEF.jpg", import.meta.url).href,
+  CTDN: new URL("../assets/showa-result-cards-complete/CTDN.jpg", import.meta.url).href,
+  CTDF: new URL("../assets/showa-result-cards-complete/CTDF.jpg", import.meta.url).href,
+};
+
 function drawRoundedRectangle(
   context: CanvasRenderingContext2D,
   x: number,
@@ -80,6 +99,41 @@ function canvasToBlob(canvas: HTMLCanvasElement): Promise<Blob> {
   });
 }
 
+function loadImage(source: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = () => reject(new Error(`Failed to load image: ${source}`));
+    image.src = source;
+  });
+}
+
+function drawCoverImage(
+  context: CanvasRenderingContext2D,
+  image: HTMLImageElement,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+) {
+  const imageRatio = image.naturalWidth / image.naturalHeight;
+  const targetRatio = width / height;
+  let sourceWidth = image.naturalWidth;
+  let sourceHeight = image.naturalHeight;
+  let sourceX = 0;
+  let sourceY = 0;
+
+  if (imageRatio > targetRatio) {
+    sourceWidth = image.naturalHeight * targetRatio;
+    sourceX = (image.naturalWidth - sourceWidth) / 2;
+  } else {
+    sourceHeight = image.naturalWidth / targetRatio;
+    sourceY = (image.naturalHeight - sourceHeight) / 2;
+  }
+
+  context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, x, y, width, height);
+}
+
 function drawWorkMark(context: CanvasRenderingContext2D, result: ReturnType<typeof getDiagnosisResult>) {
   const [primaryColor, secondaryColor] = result.type.colors;
 
@@ -118,69 +172,16 @@ async function saveResultCardImage(result: ReturnType<typeof getDiagnosisResult>
     throw new Error("Canvas is not supported");
   }
 
-  const [primaryColor, secondaryColor] = result.type.colors;
+  const resultImageSource = resultCardImages[result.code];
+  const resultImage = resultImageSource ? await loadImage(resultImageSource) : null;
 
-  context.fillStyle = "#f7f0e4";
-  context.fillRect(0, 0, canvas.width, canvas.height);
-
-  const gradient = context.createLinearGradient(0, 0, canvas.width, canvas.height);
-  gradient.addColorStop(0, `${primaryColor}3f`);
-  gradient.addColorStop(0.48, "#f7f0e4");
-  gradient.addColorStop(1, `${secondaryColor}45`);
-  context.fillStyle = gradient;
-  context.fillRect(0, 0, canvas.width, canvas.height);
-
-  context.fillStyle = "rgba(255, 253, 246, 0.48)";
-  drawRoundedRectangle(context, 34, 34, canvas.width - 68, canvas.height - 68, 28);
-  context.fill();
-
-  context.strokeStyle = "rgba(90, 57, 40, 0.34)";
-  context.lineWidth = 4;
-  drawRoundedRectangle(context, 34, 34, canvas.width - 68, canvas.height - 68, 28);
-  context.stroke();
-
-  drawWorkMark(context, result);
-
-  context.fillStyle = "rgba(255, 250, 240, 0.86)";
-  drawRoundedRectangle(context, 714, 546, 364, 60, 18);
-  context.fill();
-  context.fillStyle = "#5a3928";
-  context.font = "900 28px Hiragino Sans, Yu Gothic, sans-serif";
-  context.textAlign = "center";
-  context.fillText(result.code, 896, 584);
-  context.textAlign = "left";
-
-  context.fillStyle = "#5a3928";
-  context.font = "800 27px Hiragino Sans, Yu Gothic, sans-serif";
-  context.fillText("昭和社員転生診断", 76, 92);
-
-  context.fillStyle = primaryColor;
-  drawRoundedRectangle(context, 76, 122, 154, 48, 24);
-  context.fill();
-  context.fillStyle = "#fffaf0";
-  context.font = "900 27px Hiragino Sans, Yu Gothic, sans-serif";
-  context.fillText(result.code, 104, 154);
-
-  context.fillStyle = "#241a13";
-  context.font = "900 74px Hiragino Mincho ProN, Yu Mincho, serif";
-  drawWrappedText(context, result.type.role, 76, 255, 560, 84, 2);
-
-  context.fillStyle = "#3a2a1e";
-  context.font = "800 31px Hiragino Sans, Yu Gothic, sans-serif";
-  drawWrappedText(context, `「${result.type.line}」`, 76, 410, 550, 42, 2);
-
-  context.fillStyle = "rgba(255, 250, 240, 0.78)";
-  drawRoundedRectangle(context, 76, 474, 554, 86, 18);
-  context.fill();
-  context.fillStyle = "#5a3928";
-  context.font = "800 21px Hiragino Sans, Yu Gothic, sans-serif";
-  context.fillText("令和NG濃度", 102, 509);
-  context.font = "900 25px Hiragino Sans, Yu Gothic, sans-serif";
-  drawWrappedText(context, `${result.type.ngScore}% / ${result.type.tags.slice(0, 2).join(" ")}`, 102, 544, 500, 32, 1);
-
-  context.fillStyle = "#8f3f36";
-  context.font = "900 25px Hiragino Sans, Yu Gothic, sans-serif";
-  context.fillText("#昭和社員転生診断 #令和では封印", 76, 612);
+  if (resultImage) {
+    drawCoverImage(context, resultImage, 0, 0, canvas.width, canvas.height);
+  } else {
+    context.fillStyle = "#f7f0e4";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    drawWorkMark(context, result);
+  }
 
   const filename = `showa-employee-${result.code}.png`;
   const blob = await canvasToBlob(canvas);
@@ -418,6 +419,7 @@ function ResultView({
     "--avatar-a": result.type.colors[0],
     "--avatar-b": result.type.colors[1],
   } as CSSProperties;
+  const resultImage = resultCardImages[result.code];
 
   return (
     <section className="view active result-view" style={resultStyle}>
@@ -446,22 +448,7 @@ function ResultView({
             </div>
           </div>
           <div className="result-portrait-panel">
-            <div className="type-character portrait-character" aria-hidden="true">
-              <div className="character-badge">{result.type.mark}</div>
-              <div className="character-halo" />
-              <div className="character-hat" />
-              <div className="character-head">
-                <span className="character-eye eye-left" />
-                <span className="character-eye eye-right" />
-              </div>
-              <div className="character-collar" />
-              <div className="character-body" />
-              <div className="character-arm arm-left" />
-              <div className="character-arm arm-right" />
-              <div className="character-prop" />
-              <div className="character-leg leg-left" />
-              <div className="character-leg leg-right" />
-            </div>
+            <img className="result-type-image" src={resultImage} alt={`${result.type.role}の転生イメージ`} />
           </div>
         </div>
 
@@ -572,7 +559,7 @@ function ResultView({
                 Xで共有
               </a>
             </div>
-            <ShareCardPreview result={result} />
+            <ShareCardPreview resultImage={resultImage} />
           </section>
         </div>
       </article>
@@ -580,26 +567,11 @@ function ResultView({
   );
 }
 
-function ShareCardPreview({
-  result,
-}: {
-  result: ReturnType<typeof getDiagnosisResult>;
-}) {
+function ShareCardPreview({ resultImage }: { resultImage: string }) {
   return (
     <div className="share-card-preview" aria-label="保存される画像カードのプレビュー">
-      <div className="share-card-copy">
-        <span className="share-card-kicker">昭和社員転生診断</span>
-        <strong className="share-card-code">令和NG {result.type.ngScore}%</strong>
-        <h4>{result.type.role}</h4>
-        <p>「{result.type.line}」</p>
-        <div className="share-card-methods">
-          <span>主要タグ</span>
-          <strong>{result.type.tags.slice(0, 3).join(" ")}</strong>
-        </div>
-        <em>#昭和社員転生診断 #令和では封印</em>
-      </div>
       <div className="share-card-image">
-        <span>{result.type.mark}</span>
+        <img src={resultImage} alt="" />
       </div>
     </div>
   );
