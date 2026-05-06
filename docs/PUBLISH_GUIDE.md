@@ -90,7 +90,7 @@ public/favicon.svg
 公開URLは以下で設定済み:
 
 ```text
-https://work-style-diagnosis.vercel.app/
+https://work-style-diagnosis-jztj.vercel.app/
 ```
 
 本番URLを変える場合は、以下を新しい絶対URLへ変更する。
