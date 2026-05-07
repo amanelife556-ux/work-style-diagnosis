@@ -6,6 +6,15 @@
 /Volumes/My Passport for Mac/development/work-style-diagnosis
 ```
 
+## 正本
+
+```text
+Production URL: https://work-style-diagnosis.vercel.app/
+GitHub repository: https://github.com/amanelife556-ux/work-style-diagnosis
+Vercel project: amanelife556-uxs-projects/work-style-diagnosis
+Primary branch: main
+```
+
 ## 作業ルール
 
 - 新しい編集、テスト、ビルド確認は上記ディレクトリで行う。
@@ -14,6 +23,7 @@
 - 診断データは `src/diagnosisData.ts`、診断ロジックは `src/diagnosisLogic.ts`。
 - UIとビジュアルは `src/styles.css` と `assets/` を中心に管理する。
 - DevAideの状態は `docs/AI_KIT_VERSION.md`、プロジェクト原則は `docs/PROJECT_PRINCIPLES.md` を正本にする。
+- 公開確認は `docs/LAUNCH_READINESS_CHECKLIST.md`、違和感や効果評価の懸念は `docs/CONCERN_LOG.md` を参照する。
 
 ## 確認コマンド
 

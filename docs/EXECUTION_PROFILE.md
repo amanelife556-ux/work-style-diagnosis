@@ -1,6 +1,6 @@
 # Execution Profile: 昭和社員転生診断
 
-最終更新日: 2026-05-06
+最終更新日: 2026-05-08
 管理者: ユーザー
 
 ## 採用プロファイル
@@ -11,13 +11,14 @@ Execution mode: single-ai
 Primary coordinator: Codex / 人間
 Fallback profile: codex-only
 Upgrade target: hybrid-ready
+Current phase: launched / post-launch review
 ```
 
 ## 採用理由
 
-現在は、新規派生アプリの初期実装と運用整理の段階です。複数AIを常時分担するほどの並行作業はまだないため、Core Lite と `codex-only` を基本にします。
+現在は、本番公開完了後のレビューと小さな保守の段階です。複数AIを常時分担するほどの並行作業はないため、Core Lite と `codex-only` を基本にします。
 
-ただし、16枚の結果カード制作、文言レビュー、公開前QAが本格化した場合は `hybrid-ready` へ上げます。
+ただし、画像差し替え、文言レビュー、機能追加、公開後QAを複数AIへ分担する場合は `hybrid-ready` へ上げます。
 
 ## 実行主体
 
@@ -41,7 +42,8 @@ Upgrade target: hybrid-ready
 
 - 複数AIへ渡す作業が2件以上並行する場合、`hybrid-ready` へ上げる。
 - 画像アセットや共有カードを複数担当で制作する場合、Asset QA と Session Board を採用する。
-- 公開URL、OGP、スマホ実機確認が必要になったら Launch Readiness を採用する。
+- 公開URL、OGP、スマホ実機確認が必要になったら Launch Readiness を更新する。
+- DevAide効果、違和感、過大評価リスクが出た場合は Concern Log と Operation Review に残す。
 
 ## 引き継ぎルール
 

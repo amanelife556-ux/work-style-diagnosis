@@ -5,7 +5,7 @@
 DevAide はAIに開発を丸投げするためのものではありません。人間がプロダクトオーナーとして最終判断を行い、AIは実装、レビュー、整理、QAを支援します。
 
 ```text
-DevAide adopted version: v0.11.0-product-facing-cleanup
+DevAide adopted version: v0.15.1-human-side-advisor-differentiation
 Adoption set: Core Lite / standard-lite
 Working location: /Volumes/My Passport for Mac/development/work-style-diagnosis
 Handoff location: docs/handoffs/YYYY-MM-DD_作業名.md
@@ -20,6 +20,8 @@ DevAide source: /Volumes/My Passport for Mac/development/ai_development_session_
 - `docs/AI_KIT_VERSION.md`
 - `docs/DECISION_LOG.md`
 - `docs/CHANGE_INTAKE.md`
+- `docs/CONCERN_LOG.md`
+- `docs/LAUNCH_READINESS_CHECKLIST.md`
 - `docs/handoffs/` の最新メモ
 - 必要に応じて `/Volumes/My Passport for Mac/development/ai_development_session_kit/product/docs/AI_DEVELOPMENT_RULES.md`
 - 必要に応じて `/Volumes/My Passport for Mac/development/ai_development_session_kit/product/docs/REPORTING_MODES.md`
@@ -31,6 +33,7 @@ DevAide source: /Volumes/My Passport for Mac/development/ai_development_session_
 3. 変更しない範囲
 4. 未確認事項
 5. 確認方法
+6. 過去判断/Not Doingとの矛盾がないか
 
 未確認事項は推測で埋めず、`未確認` と書いてください。
 
@@ -57,6 +60,9 @@ DevAide source: /Volumes/My Passport for Mac/development/ai_development_session_
 - 会社員としての優劣や人格評価に見える表現を追加しない。
 - テストを通すために仕様を弱めない。
 - 失敗したテストや未実行コマンドを報告から落とさない。
+- DevAideを「AIに丸投げする自動開発ツール」として扱わない。
+- プロンプト集、便利カード集、AIタスク管理、ナレッジ検索、handoff要約だけを中心価値にしない。
+- ユーザーが違和感を示した内容を、AI判断だけで「問題なし」として流さない。
 
 ## セッション終了時
 
